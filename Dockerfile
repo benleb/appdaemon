@@ -1,4 +1,6 @@
-FROM python:3.8-alpine
+# syntax = docker/dockerfile:experimental
+
+FROM python:3.9-alpine
 
 # Environment vars we can configure against
 # But these are optional, so we won't define them now
@@ -18,15 +20,13 @@ VOLUME /certs
 WORKDIR /usr/src/app
 COPY . .
 
-# Install timezone data
-RUN apk add tzdata
-
 # Install dependencies
-RUN apk add --no-cache gcc libffi-dev openssl-dev musl-dev \
-    && pip install --no-cache-dir .
-# Install additional packages
-RUN apk add --no-cache curl
+RUN --mount=type=tmpfs,target=/tmp \
+    apk add --no-cache curl tzdata && \
+    apk add --no-cache --virtual build-deps gcc libffi-dev openssl-dev musl-dev && \
+    pip install --no-cache-dir . && \
+    chmod +x /usr/src/app/dockerStart.sh && \
+    apk del build-deps
 
 # Start script
-RUN chmod +x /usr/src/app/dockerStart.sh
 ENTRYPOINT ["./dockerStart.sh"]
