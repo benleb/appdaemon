@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:experimental
 
-FROM python:3.9-alpine
+FROM python:3.8-alpine
 
 # Environment vars we can configure against
 # But these are optional, so we won't define them now
