@@ -6,7 +6,6 @@ import time
 import traceback
 import concurrent.futures
 from urllib.parse import urlparse
-import feedparser
 from aiohttp import web
 import ssl
 import bcrypt
@@ -431,7 +430,7 @@ class HTTP:
                         self.rss_last_update = time.time()
 
                         for feed_data in self.rss_feeds:
-                            feed = await utils.run_in_executor(self, feedparser.parse, feed_data["feed"])
+                            feed = {}  # await utils.run_in_executor(self, feedparser.parse, feed_data["feed"])
                             if "bozo_exception" in feed:
                                 self.logger.warning(
                                     "Error in RSS feed %s: %s", feed_data["feed"], feed["bozo_exception"],
