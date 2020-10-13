@@ -25,7 +25,6 @@ RUN --mount=type=tmpfs,target=/tmp \
     apk add --no-cache curl tzdata && \
     apk add --no-cache --virtual build-deps gcc libffi-dev openssl-dev musl-dev && \
     pip install --no-cache-dir . && \
-    chmod +x /usr/src/app/dockerStart.sh && \
     apk del build-deps
 
 # Start script
