@@ -23,9 +23,8 @@ COPY . .
 # Install dependencies
 RUN --mount=type=tmpfs,target=/tmp \
     apk add --no-cache curl tzdata && \
-    apk add --no-cache --virtual build-deps gcc libffi-dev openssl-dev musl-dev && \
-    pip install --no-cache-dir . && \
-    apk del build-deps
+    apk add --no-cache g++ gcc libffi-dev libstdc++ openssl-dev musl-dev && \
+    pip install --no-cache-dir .
 
 # Start script
 ENTRYPOINT ["./dockerStart.sh"]
