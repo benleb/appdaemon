@@ -1,13 +1,6 @@
 # syntax = docker/dockerfile:experimental
 
-FROM python:3.8-alpine
-
-# Environment vars we can configure against
-# But these are optional, so we won't define them now
-#ENV HA_URL http://hass:8123
-#ENV HA_KEY secret_key
-#ENV DASH_URL http://hass:5050
-#ENV EXTRA_CMD -D DEBUG
+FROM python:3.9-alpine
 
 # API Port
 EXPOSE 5050
