@@ -34,10 +34,10 @@ class ADAPI:
         self.args = deepcopy(args)
         self.app_dir = self.AD.app_dir
         self.config_dir = self.AD.config_dir
-        self.dashboard_dir = None
+        # self.dashboard_dir = None
 
-        if self.AD.http is not None:
-            self.dashboard_dir = self.AD.http.dashboard_dir
+        # if self.AD.http is not None:
+        #     self.dashboard_dir = self.AD.http.dashboard_dir
 
         self.global_vars = global_vars
         self._namespace = "default"
@@ -2769,44 +2769,44 @@ class ADAPI:
     # Dashboard
     #
 
-    def dash_navigate(self, target, timeout=-1, ret=None, sticky=0):
-        """Forces all connected Dashboards to navigate to a new URL.
+    # def dash_navigate(self, target, timeout=-1, ret=None, sticky=0):
+    #     """Forces all connected Dashboards to navigate to a new URL.
 
-        Args:
-            target (str): Name of the new Dashboard to navigate to (e.g., ``/SensorPanel``).
-                Note that this value is not a URL.
-            timeout (int): Length of time to stay on the new dashboard before returning
-                to the original. This argument is optional and if not specified, the
-                navigation will be permanent. Note that if there is a click or touch on
-                the new panel before the timeout expires, the timeout will be cancelled.
-            ret (str): Dashboard to return to after the timeout has elapsed.
-            sticky (int): Specifies whether or not to return to the original dashboard
-                after it has been clicked on. The default behavior (``sticky=0``) is to remain
-                on the new dashboard if clicked, or return to the original otherwise.
-                By using a different value (sticky= 5), clicking the dashboard will extend
-                the amount of time (in seconds), but it will return to the original dashboard
-                after a period of inactivity equal to timeout.
+    #     Args:
+    #         target (str): Name of the new Dashboard to navigate to (e.g., ``/SensorPanel``).
+    #             Note that this value is not a URL.
+    #         timeout (int): Length of time to stay on the new dashboard before returning
+    #             to the original. This argument is optional and if not specified, the
+    #             navigation will be permanent. Note that if there is a click or touch on
+    #             the new panel before the timeout expires, the timeout will be cancelled.
+    #         ret (str): Dashboard to return to after the timeout has elapsed.
+    #         sticky (int): Specifies whether or not to return to the original dashboard
+    #             after it has been clicked on. The default behavior (``sticky=0``) is to remain
+    #             on the new dashboard if clicked, or return to the original otherwise.
+    #             By using a different value (sticky= 5), clicking the dashboard will extend
+    #             the amount of time (in seconds), but it will return to the original dashboard
+    #             after a period of inactivity equal to timeout.
 
-        Returns:
-            None.
+    #     Returns:
+    #         None.
 
-        Examples:
-            Switch to AlarmStatus Panel then return to current panel after 10 seconds.
+    #     Examples:
+    #         Switch to AlarmStatus Panel then return to current panel after 10 seconds.
 
-            >>> self.dash_navigate("/AlarmStatus", timeout=10)
+    #         >>> self.dash_navigate("/AlarmStatus", timeout=10)
 
-            Switch to Locks Panel then return to Main panel after 10 seconds.
+    #         Switch to Locks Panel then return to Main panel after 10 seconds.
 
-            >>> self.dash_navigate("/Locks", timeout=10, ret="/SensorPanel")
+    #         >>> self.dash_navigate("/Locks", timeout=10, ret="/SensorPanel")
 
-        """
-        kwargs = {"command": "navigate", "target": target, "sticky": sticky}
+    #     """
+    #     kwargs = {"command": "navigate", "target": target, "sticky": sticky}
 
-        if timeout != -1:
-            kwargs["timeout"] = timeout
-        if ret is not None:
-            kwargs["return"] = ret
-        self.fire_event("__HADASHBOARD_EVENT", **kwargs)
+    #     if timeout != -1:
+    #         kwargs["timeout"] = timeout
+    #     if ret is not None:
+    #         kwargs["return"] = ret
+    #     self.fire_event("__HADASHBOARD_EVENT", **kwargs)
 
     #
     # Async

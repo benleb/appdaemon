@@ -74,10 +74,10 @@ class ADBase:
         self.namespace = "default"
         self.app_dir = self.AD.app_dir
         self.config_dir = self.AD.config_dir
-        self.dashboard_dir = None
+        # self.dashboard_dir = None
 
-        if self.AD.http is not None:
-            self.dashboard_dir = self.AD.http.dashboard_dir
+        # if self.AD.http is not None:
+        #     self.dashboard_dir = self.AD.http.dashboard_dir
 
         self.logger = self._logging.get_child(name)
         self.err = self._logging.get_error().getChild(name)
