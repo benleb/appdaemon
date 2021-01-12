@@ -12,7 +12,7 @@ import bcrypt
 import uuid
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-import appdaemon.dashboard as addashboard
+# import appdaemon.dashboard as addashboard
 import appdaemon.utils as utils
 import appdaemon.stream.adstream as stream
 import appdaemon.admin as adadmin
@@ -102,7 +102,7 @@ def route_secure(myfunc):
 
 
 class HTTP:
-    def __init__(self, ad: AppDaemon, loop, logging, appdaemon, dashboard, admin, api, http):
+    def __init__(self, ad: AppDaemon, loop, logging, appdaemon, admin, api, http):
 
         self.AD = ad
         self.logging = logging
@@ -110,8 +110,8 @@ class HTTP:
         self.access = ad.logging.get_access()
 
         self.appdaemon = appdaemon
-        self.dashboard = dashboard
-        self.dashboard_dir = None
+        # self.dashboard = dashboard
+        # self.dashboard_dir = None
         self.admin = admin
         self.http = http
         self.api = api
@@ -142,7 +142,7 @@ class HTTP:
         self.logger.info("Using '%s' for event stream", self.transport)
 
         self.config_dir = None
-        self._process_arg("config_dir", dashboard)
+        # self._process_arg("config_dir", dashboard)
 
         self.static_dirs = {}
         self._process_arg("static_dirs", http)
@@ -152,7 +152,7 @@ class HTTP:
         self.endpoints = {}
         self.app_routes = {}
 
-        self.dashboard_obj = None
+        # self.dashboard_obj = None
         self.admin_obj = None
 
         self.install_dir = os.path.dirname(__file__)
@@ -237,82 +237,82 @@ class HTTP:
             # Dashboards
             #
 
-            if dashboard is not None:
-                self.logger.info("Starting Dashboards")
+            # if dashboard is not None:
+            #     self.logger.info("Starting Dashboards")
 
-                self._process_arg("dashboard_dir", dashboard)
+            #     self._process_arg("dashboard_dir", dashboard)
 
-                self.compile_on_start = True
-                self._process_arg("compile_on_start", dashboard)
+            #     self.compile_on_start = True
+            #     self._process_arg("compile_on_start", dashboard)
 
-                self.force_compile = False
-                self._process_arg("force_compile", dashboard)
+            #     self.force_compile = False
+            #     self._process_arg("force_compile", dashboard)
 
-                self.profile_dashboard = False
-                self._process_arg("profile_dashboard", dashboard)
+            #     self.profile_dashboard = False
+            #     self._process_arg("profile_dashboard", dashboard)
 
-                self.rss_feeds = None
-                self._process_arg("rss_feeds", dashboard)
+            #     self.rss_feeds = None
+            #     self._process_arg("rss_feeds", dashboard)
 
-                self.fa4compatibility = False
-                self._process_arg("fa4compatibility", dashboard)
+            #     self.fa4compatibility = False
+            #     self._process_arg("fa4compatibility", dashboard)
 
-                if "rss_feeds" in dashboard:
-                    self.rss_feeds = []
-                    for feed in dashboard["rss_feeds"]:
-                        if feed["target"].count(".") != 1:
-                            self.logger.warning("Invalid RSS feed target: %s", feed["target"])
-                        else:
-                            self.rss_feeds.append(feed)
+            #     if "rss_feeds" in dashboard:
+            #         self.rss_feeds = []
+            #         for feed in dashboard["rss_feeds"]:
+            #             if feed["target"].count(".") != 1:
+            #                 self.logger.warning("Invalid RSS feed target: %s", feed["target"])
+            #             else:
+            #                 self.rss_feeds.append(feed)
 
-                self.rss_update = None
-                self._process_arg("rss_update", dashboard)
+            #     self.rss_update = None
+            #     self._process_arg("rss_update", dashboard)
 
-                self.rss_last_update = None
+            #     self.rss_last_update = None
 
-                # find dashboard dir
+            #     # find dashboard dir
 
-                if self.dashboard_dir is None:
-                    if self.config_dir is None:
-                        self.dashboard_dir = utils.find_path("dashboards")
-                    else:
-                        self.dashboard_dir = os.path.join(self.config_dir, "dashboards")
+            #     if self.dashboard_dir is None:
+            #         if self.config_dir is None:
+            #             self.dashboard_dir = utils.find_path("dashboards")
+            #         else:
+            #             self.dashboard_dir = os.path.join(self.config_dir, "dashboards")
 
-                self.javascript_dir = os.path.join(self.install_dir, "assets", "javascript")
-                self.template_dir = os.path.join(self.install_dir, "assets", "templates")
-                self.css_dir = os.path.join(self.install_dir, "assets", "css")
-                self.fonts_dir = os.path.join(self.install_dir, "assets", "fonts")
-                self.webfonts_dir = os.path.join(self.install_dir, "assets", "webfonts")
-                self.images_dir = os.path.join(self.install_dir, "assets", "images")
+            #     self.javascript_dir = os.path.join(self.install_dir, "assets", "javascript")
+            #     self.template_dir = os.path.join(self.install_dir, "assets", "templates")
+            #     self.css_dir = os.path.join(self.install_dir, "assets", "css")
+            #     self.fonts_dir = os.path.join(self.install_dir, "assets", "fonts")
+            #     self.webfonts_dir = os.path.join(self.install_dir, "assets", "webfonts")
+            #     self.images_dir = os.path.join(self.install_dir, "assets", "images")
 
-                #
-                # Setup compile directories
-                #
-                if self.config_dir is None:
-                    self.compile_dir = utils.find_path("compiled")
-                else:
-                    self.compile_dir = os.path.join(self.config_dir, "compiled")
+            #     #
+            #     # Setup compile directories
+            #     #
+            #     if self.config_dir is None:
+            #         self.compile_dir = utils.find_path("compiled")
+            #     else:
+            #         self.compile_dir = os.path.join(self.config_dir, "compiled")
 
-                self.dashboard_obj = addashboard.Dashboard(
-                    self.config_dir,
-                    self.logging,
-                    dash_compile_on_start=self.compile_on_start,
-                    dash_force_compile=self.force_compile,
-                    profile_dashboard=self.profile_dashboard,
-                    dashboard_dir=self.dashboard_dir,
-                    fa4compatibility=self.fa4compatibility,
-                    transport=self.transport,
-                    javascript_dir=self.javascript_dir,
-                    template_dir=self.template_dir,
-                    css_dir=self.css_dir,
-                    fonts_dir=self.fonts_dir,
-                    webfonts_dir=self.webfonts_dir,
-                    images_dir=self.images_dir,
-                )
-                self.setup_dashboard_routes()
+            #     self.dashboard_obj = addashboard.Dashboard(
+            #         self.config_dir,
+            #         self.logging,
+            #         dash_compile_on_start=self.compile_on_start,
+            #         dash_force_compile=self.force_compile,
+            #         profile_dashboard=self.profile_dashboard,
+            #         dashboard_dir=self.dashboard_dir,
+            #         fa4compatibility=self.fa4compatibility,
+            #         transport=self.transport,
+            #         javascript_dir=self.javascript_dir,
+            #         template_dir=self.template_dir,
+            #         css_dir=self.css_dir,
+            #         fonts_dir=self.fonts_dir,
+            #         webfonts_dir=self.webfonts_dir,
+            #         images_dir=self.images_dir,
+            #     )
+            #     self.setup_dashboard_routes()
 
-            else:
-                self.logger.info("Dashboards Disabled")
+            # else:
+            #     self.logger.info("Dashboards Disabled")
 
             #
             # Finish up and start the server
@@ -323,8 +323,8 @@ class HTTP:
             # f = loop.create_server(handler, "0.0.0.0", int(self.port), ssl=context)
             # loop.create_task(f)
 
-            if self.dashboard_obj is not None:
-                loop.create_task(self.update_rss())
+            # if self.dashboard_obj is not None:
+            #     loop.create_task(self.update_rss())
 
         except Exception:
             self.logger.warning("-" * 60)
@@ -408,46 +408,46 @@ class HTTP:
         response = await utils.run_in_executor(self, self.dashboard_obj.get_dashboard_list)
         return web.Response(text=response, content_type="text/html")
 
-    @secure
-    async def load_dash(self, request):
-        name = request.match_info.get("name", "Anonymous")
-        params = request.query
-        skin = params.get("skin", "default")
-        recompile = params.get("recompile", False)
-        if recompile == "1":
-            recompile = True
+    # @secure
+    # async def load_dash(self, request):
+    #     name = request.match_info.get("name", "Anonymous")
+    #     params = request.query
+    #     skin = params.get("skin", "default")
+    #     recompile = params.get("recompile", False)
+    #     if recompile == "1":
+    #         recompile = True
 
-        response = await utils.run_in_executor(self, self.dashboard_obj.get_dashboard, name, skin, recompile)
+    #     response = await utils.run_in_executor(self, self.dashboard_obj.get_dashboard, name, skin, recompile)
 
-        return web.Response(text=response, content_type="text/html")
+    #     return web.Response(text=response, content_type="text/html")
 
-    async def update_rss(self):
-        # Grab RSS Feeds
-        if self.rss_feeds is not None and self.rss_update is not None:
-            while not self.stopping:
-                try:
-                    if self.rss_last_update is None or (self.rss_last_update + self.rss_update) <= time.time():
-                        self.rss_last_update = time.time()
+    # async def update_rss(self):
+    #     # Grab RSS Feeds
+    #     if self.rss_feeds is not None and self.rss_update is not None:
+    #         while not self.stopping:
+    #             try:
+    #                 if self.rss_last_update is None or (self.rss_last_update + self.rss_update) <= time.time():
+    #                     self.rss_last_update = time.time()
 
-                        for feed_data in self.rss_feeds:
-                            feed = {}  # await utils.run_in_executor(self, feedparser.parse, feed_data["feed"])
-                            if "bozo_exception" in feed:
-                                self.logger.warning(
-                                    "Error in RSS feed %s: %s", feed_data["feed"], feed["bozo_exception"],
-                                )
-                            else:
-                                new_state = {"feed": feed}
+    #                     for feed_data in self.rss_feeds:
+    #                         feed = {}  # await utils.run_in_executor(self, feedparser.parse, feed_data["feed"])
+    #                         if "bozo_exception" in feed:
+    #                             self.logger.warning(
+    #                                 "Error in RSS feed %s: %s", feed_data["feed"], feed["bozo_exception"],
+    #                             )
+    #                         else:
+    #                             new_state = {"feed": feed}
 
-                                # RSS Feeds always live in the admin namespace
-                                await self.AD.state.set_state("rss", "admin", feed_data["target"], state=new_state)
+    #                             # RSS Feeds always live in the admin namespace
+    #                             await self.AD.state.set_state("rss", "admin", feed_data["target"], state=new_state)
 
-                    await asyncio.sleep(1)
-                except Exception:
-                    self.logger.warning("-" * 60)
-                    self.logger.warning("Unexpected error in update_rss()")
-                    self.logger.warning("-" * 60)
-                    self.logger.warning(traceback.format_exc())
-                    self.logger.warning("-" * 60)
+    #                 await asyncio.sleep(1)
+    #             except Exception:
+    #                 self.logger.warning("-" * 60)
+    #                 self.logger.warning("Unexpected error in update_rss()")
+    #                 self.logger.warning("-" * 60)
+    #                 self.logger.warning(traceback.format_exc())
+    #                 self.logger.warning("-" * 60)
 
     #
     # REST API
@@ -615,28 +615,28 @@ class HTTP:
             #
             # Some value munging for dashboard
             #
-            for key in data:
-                if key == "service":
-                    pass
-                elif key == "rgb_color":
-                    m = re.search(r"\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)", data[key])
-                    if m:
-                        r = m.group(1)
-                        g = m.group(2)
-                        b = m.group(3)
-                        args["rgb_color"] = [r, g, b]
-                elif key == "xy_color":
-                    m = re.search(r"\s*(\d+\.\d+)\s*,\s*(\d+\.\d+)", data[key])
-                    if m:
-                        x = m.group(1)
-                        y = m.group(2)
-                        args["xy_color"] = [x, y]
-                elif key == "json_args":
-                    json_args = json.loads(data[key])
-                    for k in json_args.keys():
-                        args[k] = json_args[k]
-                else:
-                    args[key] = data[key]
+            # for key in data:
+            #     if key == "service":
+            #         pass
+            #     elif key == "rgb_color":
+            #         m = re.search(r"\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)", data[key])
+            #         if m:
+            #             r = m.group(1)
+            #             g = m.group(2)
+            #             b = m.group(3)
+            #             args["rgb_color"] = [r, g, b]
+            #     elif key == "xy_color":
+            #         m = re.search(r"\s*(\d+\.\d+)\s*,\s*(\d+\.\d+)", data[key])
+            #         if m:
+            #             x = m.group(1)
+            #             y = m.group(2)
+            #             args["xy_color"] = [x, y]
+            #     elif key == "json_args":
+            #         json_args = json.loads(data[key])
+            #         for k in json_args.keys():
+            #             args[k] = json_args[k]
+            #     else:
+            #         args[key] = data[key]
 
             self.logger.debug("call_service() args = %s", args)
 
@@ -665,12 +665,12 @@ class HTTP:
             #
             # Some value munging for dashboard
             #
-            for key in data:
-                if key == "event":
-                    pass
+            # for key in data:
+            #     if key == "event":
+            #         pass
 
-                else:
-                    args[key] = data[key]
+            #     else:
+            #         args[key] = data[key]
 
             self.logger.debug("fire_event() args = %s", args)
 
@@ -734,8 +734,8 @@ class HTTP:
 
         if self.admin is not None:
             self.app.router.add_get("/", self.admin_page)
-        elif self.dashboard is not None:
-            self.app.router.add_get("/", self.list_dash)
+        # elif self.dashboard is not None:
+        #     self.app.router.add_get("/", self.list_dash)
         else:
             self.app.router.add_get("/", self.error_page)
 
@@ -773,21 +773,21 @@ class HTTP:
                 self.app.router.add_static("/{}".format(name), static_dir)
                 self.logger.debug("Successfully created the Web directory %s ", static_dir)
 
-    def setup_dashboard_routes(self):
-        self.app.router.add_get("/list", self.list_dash)
-        self.app.router.add_get("/{name}", self.load_dash)
+    # def setup_dashboard_routes(self):
+    #     self.app.router.add_get("/list", self.list_dash)
+    #     # self.app.router.add_get("/{name}", self.load_dash)
 
-        # Setup Templates
+    #     # Setup Templates
 
-        self.app.router.add_static("/compiled_javascript", self.dashboard_obj.compiled_javascript_dir)
+    #     self.app.router.add_static("/compiled_javascript", self.dashboard_obj.compiled_javascript_dir)
 
-        self.app.router.add_static("/compiled_css", self.dashboard_obj.compiled_css_dir)
+    #     self.app.router.add_static("/compiled_css", self.dashboard_obj.compiled_css_dir)
 
-        # Add path for custom_css if it exists
+    #     # Add path for custom_css if it exists
 
-        custom_css = os.path.join(self.dashboard_obj.config_dir, "custom_css")
-        if os.path.isdir(custom_css):
-            self.app.router.add_static("/custom_css", custom_css)
+    #     custom_css = os.path.join(self.dashboard_obj.config_dir, "custom_css")
+    #     if os.path.isdir(custom_css):
+    #         self.app.router.add_static("/custom_css", custom_css)
 
     # API
 

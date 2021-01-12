@@ -94,7 +94,7 @@ class ADMain:
             self.http_object.stop()
 
     # noinspection PyBroadException,PyBroadException
-    def run(self, appdaemon, hadashboard, admin, api, http):
+    def run(self, appdaemon, admin, api, http):
         """ Start AppDaemon up after initial argument parsing.
 
         Args:
@@ -118,9 +118,10 @@ class ADMain:
 
             # Initialize Dashboard/API/admin
 
-            if http is not None and (hadashboard is not None or admin is not None or api is not False):
+            # if http is not None and (hadashboard is not None or admin is not None or api is not False):
+            if http is not None and (admin is not None or api is not False):
                 self.logger.info("Initializing HTTP")
-                self.http_object = adhttp.HTTP(self.AD, loop, self.logging, appdaemon, hadashboard, admin, api, http,)
+                self.http_object = adhttp.HTTP(self.AD, loop, self.logging, appdaemon, admin, api, http,)
                 self.AD.register_http(self.http_object)
             else:
                 if http is not None:
@@ -306,22 +307,22 @@ class ADMain:
 
         appdaemon["stop_function"] = self.stop
 
-        hadashboard = None
-        if "hadashboard" in config:
-            if config["hadashboard"] is None:
-                hadashboard = {}
-            else:
-                hadashboard = config["hadashboard"]
+        # hadashboard = None
+        # if "hadashboard" in config:
+        #     if config["hadashboard"] is None:
+        #         hadashboard = {}
+        #     else:
+        #         hadashboard = config["hadashboard"]
 
-            hadashboard["profile_dashboard"] = args.profiledash
-            hadashboard["config_dir"] = config_dir
-            hadashboard["config_file"] = config_file_yaml
-            hadashboard["config_dir"] = os.path.dirname(config_file_yaml)
-            if args.profiledash:
-                hadashboard["profile_dashboard"] = True
+        #     hadashboard["profile_dashboard"] = args.profiledash
+        #     hadashboard["config_dir"] = config_dir
+        #     hadashboard["config_file"] = config_file_yaml
+        #     hadashboard["config_dir"] = os.path.dirname(config_file_yaml)
+        #     if args.profiledash:
+        #         hadashboard["profile_dashboard"] = True
 
-            if "dashboard" not in hadashboard:
-                hadashboard["dashboard"] = True
+        #     if "dashboard" not in hadashboard:
+        #         hadashboard["dashboard"] = True
 
         admin = None
         if "admin" in config:
@@ -367,7 +368,7 @@ class ADMain:
         self.logger.info("Configuration read from: %s", config_file_yaml)
         self.logging.dump_log_config()
         self.logger.debug("AppDaemon Section: %s", config.get("appdaemon"))
-        self.logger.debug("HADashboard Section: %s", config.get("hadashboard"))
+        # self.logger.debug("HADashboard Section: %s", config.get("hadashboard"))
 
         exit = False
 
@@ -398,11 +399,11 @@ class ADMain:
             name = os.path.basename(pidfile)
             try:
                 with pid.PidFile(name, dir):
-                    self.run(appdaemon, hadashboard, admin, api, http)
+                    self.run(appdaemon, admin, api, http)
             except pid.PidFileError:
                 self.logger.error("Unable to acquire pidfile - terminating")
         else:
-            self.run(appdaemon, hadashboard, admin, api, http)
+            self.run(appdaemon, admin, api, http)
 
 
 def main():
