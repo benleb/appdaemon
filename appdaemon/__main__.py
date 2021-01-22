@@ -25,6 +25,9 @@ import appdaemon.http as adhttp
 import appdaemon.logging as logging
 
 
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+
+
 class ADMain:
     """
     Class to encapsulate all main() functionality.
