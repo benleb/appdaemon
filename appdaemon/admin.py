@@ -50,10 +50,7 @@ class Admin:
         try:
             params = {"transport": self.transport, "title": self.title}
 
-            if self.AD.http.dashboard_obj is not None:
-                params["dashboard"] = True
-            else:
-                params["dashboard"] = False
+            params["dashboard"] = False
 
             # Logs
 

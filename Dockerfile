@@ -16,7 +16,7 @@ COPY . .
 # Install dependencies
 RUN --mount=type=tmpfs,target=/tmp \
     apk add --no-cache curl tzdata && \
-    apk add --no-cache g++ gcc libffi-dev libstdc++ openssl-dev musl-dev && \
+    apk add --no-cache build-base g++ gcc libffi-dev libstdc++ openssl-dev musl-dev && \
     pip install --no-cache-dir .
 
 # Start script
